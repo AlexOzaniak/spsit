@@ -87,7 +87,7 @@ function ago(ts) {
 function render() {
   const grid  = document.getElementById('grid');
   const empty = document.getElementById('empty');
-  const list = activeCat === 'all' ? ideas : ideas.filter(i => i.category === activeCat);
+  const list = (activeCat === 'all' ? ideas : ideas.filter(i => i.category === activeCat)).slice(0, 4);
   
   document.getElementById('ideasSub').textContent = `${ideas.length} príspevkov`;
   document.getElementById('fstatNum').textContent  = ideas.length;
