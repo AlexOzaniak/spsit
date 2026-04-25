@@ -13,9 +13,99 @@ const CATS = {
 const MOODS = { 5:'😄', 4:'🙂', 3:'😐', 2:'😕', 1:'😞' };
 
 const BANNED_WORDS = [
-  'kokot', 'pica', 'cigan', 'zebrak', 'kurva', 'svinstvo', 'kretén',
-  'idiot', 'debil', 'hlupák', 'klucháč', 'budala', 'škrtač', 'zmrd',
-  'hajzel', 'piča', 'maká', 'ty vole', 'do piče'
+  // Sexuální a erotické nadávky
+  'jebnuty', 'vyjebany', 'dojebany', 'zajebany', 'ojebany', 'prijebany', 'najebany', 'prejebany', 'rozjebany', 'pojebany', 'ujebany', 'jeblina', 'jebal', 'jebnutost', 'jebak', 'jebanec', 'jebanica', 'jebenica', 'jebav', 'jebavac', 'jebavka', 'jebavost', 'jebavacka',
+  'chuj', 'chujovina', 'chujov', 'vyhujeny', 'dochujeny', 'pachuj', 'chujovec', 'chujovka', 'chujo', 'chujac', 'chuják', 'chujácia', 'chujacka', 'chujakovity', 'chujicka', 'chujil', 'chujanici', 'chujicnik',
+  'pica', 'pici', 'dopice', 'zapice', 'vypice', 'picovina', 'picus', 'vypicovany', 'dopicovany', 'zapicovany', 'rozpicovany', 'picisko', 'picovyna', 'pichac', 'pichač', 'pichať', 'spikat', 'spikať', 'pikal', 'pikať', 'piku', 'piku sa',
+  'picha', 'pichanie', 'pichot', 'pichovacka', 'pichara', 'pichatko', 'pichavost',
+  'prdel', 'prdla', 'prdlancka', 'prdlanica', 'prdlanek', 'prdlancok', 'prdlacka', 'prdlista', 'prdlistka', 'prdlistko', 'prdlistovy', 'prdlo', 'prdla',
+  'rit', 'doriti', 'ritolezec', 'ritopich', 'ritny', 'ritista', 'ritistka', 'ritovacka', 'ritovacko', 'ritovany', 'ritovka', 'ritisko', 'ritalko', 'ritacik',
+  'pinda', 'pindarella', 'pindolova', 'pindakovista', 'pindaka', 'pindalistka', 'pindalist',
+  'flandra', 'flandrina', 'flandrinka', 'flandrista', 'flandristka', 'flandrovic',
+  'cundra', 'cundrina', 'cundrista', 'cundristka', 'cundrovic', 'cundrina', 'cundralovska', 'cundralist',
+  'prostitutka', 'prostitutnicka', 'prostitutny', 'prostitucia', 'prostituovanie',
+  'stetka', 'slapka', 'kurvicka', 'kurvicka', 'kurva', 'kurvi', 'kurvina', 'kurvinstva', 'kurvit', 'kurvovanie', 'kurvovost', 'kurvovanka', 'kurvovana',
+  'skurvysyn', 'skurveny', 'skurvysynsky', 'skurvit', 'dokurvit', 'zakurvit', 'vykurveny', 'prekurveny', 'rozkurveny', 'skurvovanie', 'skurvovacka', 'skurvovanka',
+  
+  // Telo a telové časti
+  'kokot', 'kokotina', 'kokotsky', 'vykokoteny', 'skokoteny', 'kokotko', 'kokotisko', 'zakokotit', 'kokoticka', 'kokoticko', 'kokoticka', 'kokotnikova',
+  
+  // Kalom a fyzickejšie vulgarizmy
+  'hovno', 'hovniar', 'hovniarstvo', 'hovniaren', 'posraty', 'vysraty', 'osraty', 'zesraty', 'nasraty', 'dosraty', 'srac', 'sracka', 'sracun', 'sracanka', 'sracko', 'sracnik', 'sracovista', 'sracovanie', 'sracavka', 'sracavost',
+  'zmrd', 'zmrdisko', 'zmrdany', 'vymrdany', 'domrdany', 'namrdany', 'mrdnuty', 'zmrdovatko', 'zmrdovatost', 'zmrdun', 'zmrdko', 'zmrdovina', 'zmrducha', 'zmrdovyna',
+  'hajzel', 'hajzlik', 'vychcanec', 'scat', 'ostany', 'vystany', 'stanka', 'stanicka', 'ostanstvo', 'stankovost', 'stankovanka', 'stankovana',
+  
+  // Duševne poruchy a intelekt
+  'kreten', 'kretensky', 'kretenstvo', 'kretenka', 'kretenstvo', 'kretuska', 'kretunka', 'kretuska',
+  'debil', 'debilny', 'debilný', 'debilska', 'debilstvo', 'debilka', 'debilacka', 'debilovacka', 'debiluvacka', 'debilka',
+  'idiot', 'idiót', 'idiotsky', 'idiotstvo', 'idiotka', 'idiotka', 'iditicka', 'iditicko', 'iditovatko',
+  'retard', 'retardovany', 'retardovaný', 'retardovacka', 'retardka', 'retardovina', 'retardovnost', 'retarduvacka',
+  'mentalo', 'mentalak', 'mentalny', 'mentalna', 'mentalka', 'mentalnacka', 'mentalovacka',
+  'postihnuty', 'postihnutost', 'postihnutacka', 'postihnutenosť',
+  'mongol', 'mongolsky', 'mongolstva', 'mongolka', 'mongolacka', 'mongolovacka',
+  
+  // Hmyz a zvieratá - ako nadávka
+  'vsa', 'vsacka', 'vsacko', 'vsatko', 'vsinka', 'vsilka', 'vsilko', 'vsovnik', 'vsovka',
+  'parazit', 'parazitka', 'parazitny', 'parazitstvo', 'parazitacka', 'parazitovacka',
+  'krysa', 'krysacka', 'krysacko', 'krysatko', 'krysinka', 'krysistka', 'krysitko',
+  'potkan', 'potkanka', 'potkanstvo', 'potkansky', 'potkanacka', 'potkanck',
+  'skor', 'skorminka', 'skormanka', 'skorinka', 'skoanka', 'skorovacka',
+  'vrana', 'vranacka', 'vranacko', 'vranista', 'vranistka', 'vranika',
+  'vranica', 'vranicka', 'vranicko', 'vranickova',
+  
+  // Socilne/etnicke
+  'cigany', 'cigan', 'ciganka', 'cigáň', 'cigansky', 'ciganisko', 'ciganstvi', 'ciganstvo', 'ciganacka', 'ciganuckova', 'cigankovska', 'cigankovacka',
+  'žid', 'židy', 'židovský', 'židostvi', 'židovstvo', 'židovka', 'židovska', 'židovacka', 'židovckova',
+  'černoch', 'cernocha', 'cernochas', 'cernochovacka', 'cernochovanka', 'cernochovacko',
+  'gadzo', 'gadzovacka', 'gadzovanka', 'gadzo', 'gadžo',
+  'deges', 'degeško', 'degesstvo', 'degesovacka', 'degesovanka',
+  
+  // Fyzicke/zdravotne
+  'kulhavec', 'kulhavka', 'kulhavost', 'kulhavacka', 'kulhavankova',
+  'slepo', 'slepý', 'slepacka', 'slepacko', 'sleposta', 'slepovacka', 'slepovanka',
+  'hluchý', 'hluchacka', 'hluchacko', 'hluchosta', 'hluchovacka', 'hluchovanost',
+  'skap', 'skapaty', 'skapat', 'skaposť', 'skapovacka', 'skapovanka', 'skapovankova',
+  'zdochnuty', 'zdochnuta', 'zdochost', 'zdochovacka', 'zdochovanka', 'zdochovankova',
+  'mrtvola', 'mrvola', 'mrtvolan', 'mrtvoly', 'mrtvoly', 'mrvolan', 'mrvolanka',
+  
+  // Slang a prikryta
+  'klucháč', 'klúcháč', 'kluchacka', 'kluchackova', 'kluchackost',
+  'buran', 'buranacka', 'buranacko', 'buranista', 'buranistka', 'buranstvo',
+  'budala', 'budalka', 'budalstvo', 'budalacka', 'budalacko', 'budalovatko',
+  'skrota', 'skrotok', 'skrotacka', 'skrotacko', 'skrotovacka', 'skrotovanka',
+  'trtko', 'trtkat', 'vytrtkat', 'dotrtkat', 'trtkovacka', 'trtkovanka', 'trtkovina',
+  'suvix', 'suvixacka', 'suvixacko', 'suvixovacka', 'suvixovanka', 'suvixovina',
+  'trulo', 'trulova', 'trulovska', 'trulovacka', 'trulovanka', 'trulovacko',
+  'mamlas', 'mamlaska', 'mamlasko', 'mamlasacka', 'mamlasacko', 'mamlasin',
+  'obuch', 'obucha', 'obuchy', 'obuchacka', 'obuchacko', 'obuchovina',
+  'tenko', 'tenkovinacka', 'tenkovacka', 'tenkovanka', 'tenkovacko',
+  
+  // Razne
+  'hovado', 'hovaď', 'hovädko', 'hovadoňa', 'hovadstvo', 'hovadacka', 'hovadacko', 'hovadovacka',
+  'buzerant', 'buzna', 'teply', 'buzik', 'buzerantsky', 'buzerovat', 'buzovacka', 'buzovanka', 'buzovankova',
+  'svinstvo', 'svinský', 'svinčí', 'svinčo', 'svinčota', 'svinacka', 'svinacko', 'svinacka', 'svinovacka',
+  'smrada', 'smradoch', 'smradka', 'smrad', 'smradny', 'smradivost', 'smradovacka', 'smradovanka',
+  'chudak', 'chudacka', 'chudacko', 'chuderák', 'chudacka', 'chudacko', 'chudovacka', 'chudovanka',
+  'zebrak', 'zebrakov', 'vyzebrakovany', 'zebrakovacka', 'zebrakovanka', 'zebrakovina',
+  'genital', 'genitalia', 'genitalna', 'genitalny', 'genitalova', 'genitalovna', 'genitalovinacka',
+  'onanista', 'onanistka', 'onanizovanie', 'onanizovacka', 'onanizovanka', 'onanizovankova',
+  'honibrk', 'honibrkacka', 'honibrkacko', 'honibrkovacka', 'honibrkovanka', 'honibrkovankova',
+  
+  // Viacslové nadávky
+  'ty vole', 'ty kurva', 'ty svinstvo', 'ty zmrd', 'ty debile', 'ty idiote', 'ty kretene', 'ty hajzle',
+  'do piče', 'do pice', 'do prdele', 'do piče tvoja', 'do piče tvojej matky', 'do piče vos',
+  'kurva tvoja', 'svinstvo tvoje', 'zmrd jeden', 'hajzel jeden',
+  'vy kurvi', 'vy svine', 'vy hovada', 'vy budali', 'vy skroty', 'vy chuderaky', 'vy chudinski', 'vy kravacci',
+  'jaras sa', 'jebnem sa', 'pojebem sa', 'dojebem sa',
+  
+  // Anglicke nadavky a vulgarizmy
+  'fuck', 'fucked', 'fucker', 'fucking', 'fuckwit', 'fuckhead', 'mindfuck', 'shithole', 'shitty', 'shit', 'asshole', 'bastard', 'bitch', 'bitches', 'bitchy', 'crap', 'crappy', 'dick', 'dicks', 'dickwad', 'dickhead', 'damn', 'damned', 'goddamn', 'hell', 'piss', 'pisses', 'pissed', 'pissant', 'cock', 'cocksucking', 'cocksucker', 'balls', 'ballbag', 'arse', 'arsehole', 'asshat', 'ass', 'sucks', 'suck',
+  
+  // Ďalšie slova s české/moravske nadavky
+  'debilní', 'debilního', 'debilníka', 'debilnímu', 'debilník', 'debilníka', 'kretén', 'kretén', 'kretého', 'kreténu', 'hajzele',
+  
+  // Skratky a sleng
+  'wft', 'wtf', 'stfu', 'lol', 'omfg'
 ];
 // Use same-origin when served, but fall back to local Express when opened from disk.
 const API = (window.location.protocol === 'file:' || window.location.origin === 'null')
