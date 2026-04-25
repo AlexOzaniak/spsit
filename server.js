@@ -44,42 +44,10 @@ async function initDatabase() {
         text LONGTEXT,
         likes INT DEFAULT 0,
         voted_for_creators BOOLEAN DEFAULT NULL,
-        city VARCHAR(100),
-        user_agent TEXT,
-        device_info VARCHAR(500),
-        ip_address_internal VARCHAR(45),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        INDEX idx_city_created (city, created_at),
-        INDEX idx_ip_internal (ip_address_internal, created_at),
-        INDEX idx_text_hash (text(100))
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
     `);
-    
-    // Add missing columns if they don't exist (migration)
-    try {
-      await connection.execute(`ALTER TABLE spsit ADD COLUMN ip_address_internal VARCHAR(45)`);
-    } catch (err) {
-      // Column already exists, that's fine
-    }
-    
-    try {
-      await connection.execute(`ALTER TABLE spsit ADD COLUMN city VARCHAR(100)`);
-    } catch (err) {
-      // Column already exists, that's fine
-    }
-    
-    try {
-      await connection.execute(`ALTER TABLE spsit ADD COLUMN user_agent TEXT`);
-    } catch (err) {
-      // Column already exists, that's fine
-    }
-    
-    try {
-      await connection.execute(`ALTER TABLE spsit ADD COLUMN device_info VARCHAR(500)`);
-    } catch (err) {
-      // Column already exists, that's fine
-    }
     
     connection.release();
     console.log('✓ Database initialized. spsit table ready.');
@@ -119,35 +87,20 @@ app.get('/api/ideas', async (req, res) => {
 });
 
 app.post('/api/ideas', async (req, res) => {
-  const { nick, grade, category, mood, text, deviceInfo } = req.body;
+  const { nick, grade, category, mood, text } = req.body;
   
-  // Get client IP
+  // Get client IP for rate limiting
   const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || 
              req.connection.remoteAddress || 
              req.socket.remoteAddress;
   
-  // Get User-Agent
-  const userAgent = req.headers['user-agent'] || 'Unknown';
-  
-  // Get city from IP using free geolocation service
-  let city = 'Unknown';
-  try {
-    const geoResponse = await fetch(`https://ip-api.com/json/${ip}?fields=city`);
-    if (geoResponse.ok) {
-      const geoData = await geoResponse.json();
-      city = geoData.city || 'Unknown';
-    }
-  } catch (err) {
-    console.log('Geolocation fetch failed, using default');
-  }
-  
   try {
     const connection = await pool.getConnection();
     
-    // Check for duplicate text from same IP (last 24 hours)
+    // Check for duplicate text (case-insensitive) - last 24 hours
     const [duplicates] = await connection.execute(
-      'SELECT id FROM spsit WHERE ip_address_internal = ? AND text = ? AND created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)',
-      [ip, text]
+      'SELECT id FROM spsit WHERE LOWER(text) = LOWER(?) AND created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)',
+      [text]
     );
     
     if (duplicates.length > 0) {
@@ -166,14 +119,12 @@ app.post('/api/ideas', async (req, res) => {
       return res.status(429).json({ error: 'Čakaj 15 sekúnd pred ďalším návrhom.' });
     }
     
-    // Insert with city, User-Agent, and device info (IP stored only for internal use)
     const [result] = await connection.execute(
-      'INSERT INTO spsit (nick, grade, category, mood, text, city, user_agent, device_info, ip_address_internal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [nick || null, grade, category, mood, text, city, userAgent, deviceInfo || null, ip]
+      'INSERT INTO spsit (nick, grade, category, mood, text, ip_address_internal) VALUES (?, ?, ?, ?, ?, ?)',
+      [nick || null, grade, category, mood, text, ip]
     );
-    
     connection.release();
-    res.json({ id: result.insertId, ...req.body, city });
+    res.json({ id: result.insertId, ...req.body });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
