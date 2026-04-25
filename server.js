@@ -56,6 +56,31 @@ async function initDatabase() {
       )
     `);
     
+    // Add missing columns if they don't exist (migration)
+    try {
+      await connection.execute(`ALTER TABLE spsit ADD COLUMN ip_address_internal VARCHAR(45)`);
+    } catch (err) {
+      // Column already exists, that's fine
+    }
+    
+    try {
+      await connection.execute(`ALTER TABLE spsit ADD COLUMN city VARCHAR(100)`);
+    } catch (err) {
+      // Column already exists, that's fine
+    }
+    
+    try {
+      await connection.execute(`ALTER TABLE spsit ADD COLUMN user_agent TEXT`);
+    } catch (err) {
+      // Column already exists, that's fine
+    }
+    
+    try {
+      await connection.execute(`ALTER TABLE spsit ADD COLUMN device_info VARCHAR(500)`);
+    } catch (err) {
+      // Column already exists, that's fine
+    }
+    
     connection.release();
     console.log('✓ Database initialized. spsit table ready.');
   } catch (error) {
