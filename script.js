@@ -54,12 +54,14 @@ const BANNED_WORDS = [
   'vrana', 'vranacka', 'vranacko', 'vranista', 'vranistka', 'vranika',
   'vranica', 'vranicka', 'vranicko', 'vranickova',
   
-  // Socilne/etnicke
+  // Rasistické slová a slúry
+  'nigger', 'niggra', 'nigga', 'niggas', 'niggaz', 'niggah', 'nigguh', 'malinyggerko', 'malinigger', 'maliniggerko', 'malinygger', 'maliniggerko',
   'cigany', 'cigan', 'ciganka', 'cigáň', 'cigansky', 'ciganisko', 'ciganstvi', 'ciganstvo', 'ciganacka', 'ciganuckova', 'cigankovska', 'cigankovacka',
   'žid', 'židy', 'židovský', 'židostvi', 'židovstvo', 'židovka', 'židovska', 'židovacka', 'židovckova',
   'černoch', 'cernocha', 'cernochas', 'cernochovacka', 'cernochovanka', 'cernochovacko',
   'gadzo', 'gadzovacka', 'gadzovanka', 'gadzo', 'gadžo',
   'deges', 'degeško', 'degesstvo', 'degesovacka', 'degesovanka',
+  'farbák', 'farbakin', 'farbakovi', 'arabák', 'asiata', 'azijský', 'čínsky', 'čínčan',
   
   // Fyzicke/zdravotne
   'kulhavec', 'kulhavka', 'kulhavost', 'kulhavacka', 'kulhavankova',
