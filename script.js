@@ -18,6 +18,7 @@ const BANNED_WORDS = [
   'chuj', 'chujovina', 'chujov', 'vyhujeny', 'dochujeny', 'pachuj', 'chujovec', 'chujovka', 'chujo', 'chujac', 'chuják', 'chujácia', 'chujacka', 'chujakovity', 'chujicka', 'chujil', 'chujanici', 'chujicnik',
   'pica', 'pici', 'dopice', 'zapice', 'vypice', 'picovina', 'picus', 'vypicovany', 'dopicovany', 'zapicovany', 'rozpicovany', 'picisko', 'picovyna', 'pichac', 'pichač', 'pichať', 'spikat', 'spikať', 'pikal', 'pikať', 'piku', 'piku sa',
   'picha', 'pichanie', 'pichot', 'pichovacka', 'pichara', 'pichatko', 'pichavost',
+  'sex', 'sexovat', 'sexovanie', 'sexovacka', 'sexovanka', 'sexovankova', 'sexovany', 'sexovana', 'sexovacko', 'sexista', 'sexistka', 'sexizmus', 'sexualny', 'sexualna', 'sexualita', 'sexualizacia', 'sexualizovanie',
   'prdel', 'prdla', 'prdlancka', 'prdlanica', 'prdlanek', 'prdlancok', 'prdlacka', 'prdlista', 'prdlistka', 'prdlistko', 'prdlistovy', 'prdlo', 'prdla',
   'rit', 'doriti', 'ritolezec', 'ritopich', 'ritny', 'ritista', 'ritistka', 'ritovacka', 'ritovacko', 'ritovany', 'ritovka', 'ritisko', 'ritalko', 'ritacik',
   'pinda', 'pindarella', 'pindolova', 'pindakovista', 'pindaka', 'pindalistka', 'pindalist',
