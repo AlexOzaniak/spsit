@@ -11,6 +11,12 @@ const CATS = {
 };
 
 const MOODS = { 5:'😄', 4:'🙂', 3:'😐', 2:'😕', 1:'😞' };
+
+const BANNED_WORDS = [
+  'kokot', 'pica', 'cigan', 'zebrak', 'kurva', 'svinstvo', 'kretén',
+  'idiot', 'debil', 'hlupák', 'klucháč', 'budala', 'škrtač', 'zmrd',
+  'hajzel', 'piča', 'maká', 'ty vole', 'do piče'
+];
 // Use same-origin when served, but fall back to local Express when opened from disk.
 const API = (window.location.protocol === 'file:' || window.location.origin === 'null')
   ? 'http://localhost:3000/api'
@@ -69,6 +75,16 @@ function esc(s) {
   return String(s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function checkProfanity(text) {
+  const lowerText = text.toLowerCase();
+  for (const word of BANNED_WORDS) {
+    if (lowerText.includes(word)) {
+      return word;
+    }
+  }
+  return null;
 }
 
 function ago(ts) {
@@ -158,6 +174,13 @@ document.getElementById('form').addEventListener('submit', async e => {
   if (!grade) { shake(document.getElementById('grade')); return; }
   if (!txt)   { shake(document.getElementById('txt'));   return; }
 
+  const bannedWord = checkProfanity(txt);
+  if (bannedWord) {
+    showErrorMessage(bannedWord);
+    shake(document.getElementById('txt'));
+    return;
+  }
+
   const success = await addIdea({
     nick: nick || 'Anonymný',
     grade,
@@ -196,6 +219,18 @@ function toast() {
   const t = document.getElementById('toast');
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── ERROR MESSAGE ───────────────────────────────────────
+function showErrorMessage(word) {
+  const container = document.getElementById('toast');
+  const oldHTML = container.innerHTML;
+  container.innerHTML = `<span>${word} nie je povolené</span>`;
+  container.classList.add('show');
+  setTimeout(() => {
+    container.innerHTML = oldHTML;
+    container.classList.remove('show');
+  }, 3000);
 }
 
 // ── VOTE MODAL ──────────────────────────────────────────
