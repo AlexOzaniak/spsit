@@ -135,13 +135,30 @@ async function loadIdeas() {
 
 async function addIdea(data) {
   try {
+    // Add device info to data
+    data.deviceInfo = getDeviceInfo();
+    
     const res = await fetch(`${API}/ideas`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    if (!res.ok) throw new Error('Failed to add idea');
-    const newIdea = await res.json();
+    
+    const responseData = await res.json();
+    
+    if (!res.ok) {
+      // Handle error messages from server
+      if (res.status === 400) {
+        showErrorMessage(responseData.error || 'Chyba');
+      } else if (res.status === 429) {
+        showRateLimitError(responseData.error || 'Príliš rýchlo!');
+      } else {
+        showErrorMessage(responseData.error || 'Chyba pri poslaní');
+      }
+      return false;
+    }
+    
+    const newIdea = responseData;
     ideas.unshift(newIdea);
     render();
     return true;
@@ -168,6 +185,34 @@ function esc(s) {
   return String(s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getDeviceInfo() {
+  const ua = navigator.userAgent;
+  let browser = 'Unknown';
+  let os = 'Unknown';
+  let deviceType = 'Unknown';
+  
+  // Detect Browser
+  if (ua.includes('Chrome') && !ua.includes('Chromium')) browser = 'Chrome';
+  else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+  else if (ua.includes('Firefox')) browser = 'Firefox';
+  else if (ua.includes('Edge')) browser = 'Edge';
+  else if (ua.includes('Opera')) browser = 'Opera';
+  
+  // Detect OS
+  if (ua.includes('Windows')) os = 'Windows';
+  else if (ua.includes('Mac')) os = 'macOS';
+  else if (ua.includes('Linux')) os = 'Linux';
+  else if (ua.includes('Android')) os = 'Android';
+  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+  
+  // Detect Device Type
+  if (ua.includes('Mobile') || ua.includes('iPhone') || ua.includes('Android')) deviceType = 'Mobile';
+  else if (ua.includes('Tablet') || ua.includes('iPad')) deviceType = 'Tablet';
+  else deviceType = 'Desktop';
+  
+  return `${deviceType} | ${browser} | ${os} | ${window.innerWidth}x${window.innerHeight}`;
 }
 
 function checkProfanity(text) {
@@ -218,7 +263,7 @@ function render() {
       </div>
       <p class="icard-text">${esc(idea.text)}</p>
       <div class="icard-foot">
-        <span class="icard-who">🎓 ${esc(idea.nick || 'Anonymný')}${idea.grade ? ` · ${idea.grade}. roč.` : ''} · ${ago(idea.created_at)}</span>
+        <span class="icard-who">🎓 ${idea.nick ? esc(idea.nick) : 'Anonymný'}${idea.grade ? ` · ${idea.grade}. roč.` : ''} · ${ago(idea.created_at)}</span>
         <button class="icard-like" data-id="${idea.id}" onclick="handleLike(${idea.id})">
           🤍 ${likes}
         </button>
@@ -275,7 +320,7 @@ document.getElementById('form').addEventListener('submit', async e => {
   }
 
   const success = await addIdea({
-    nick: nick || 'Anonymný',
+    nick: nick,
     grade,
     category: selectedCat || 'ine',
     text: txt,
@@ -325,7 +370,17 @@ function showErrorMessage(word) {
     container.classList.remove('show');
   }, 3000);
 }
-
+// ── RATE LIMIT ERROR ────────────────────────────────
+function showRateLimitError(message) {
+  const container = document.getElementById('toast');
+  const oldHTML = container.innerHTML;
+  container.innerHTML = `<span>${message}</span>`;
+  container.classList.add('show');
+  setTimeout(() => {
+    container.innerHTML = oldHTML;
+    container.classList.remove('show');
+  }, 4000);
+}
 // ── VOTE MODAL ──────────────────────────────────────────
 let lastIdeaId = null;
 
