@@ -140,20 +140,8 @@ async function addIdea(data) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    
-    const responseData = await res.json();
-    
-    if (!res.ok) {
-      // Handle error messages from server
-      if (res.status === 400 || res.status === 429) {
-        showErrorMessage(responseData.error || 'Chyba');
-      } else {
-        showErrorMessage(responseData.error || 'Chyba pri poslaní');
-      }
-      return false;
-    }
-    
-    const newIdea = responseData;
+    if (!res.ok) throw new Error('Failed to add idea');
+    const newIdea = await res.json();
     ideas.unshift(newIdea);
     render();
     return true;
@@ -327,16 +315,10 @@ function toast() {
 }
 
 // ── ERROR MESSAGE ───────────────────────────────────────
-function showErrorMessage(message) {
+function showErrorMessage(word) {
   const container = document.getElementById('toast');
   const oldHTML = container.innerHTML;
-  
-  // Check if message contains "nie je povolené" (from profanity check)
-  if (!message.includes('nie je povolené') && !message.includes('Čakaj') && !message.includes('Rovnaký')) {
-    message = message + ' nie je povolené';
-  }
-  
-  container.innerHTML = `<span>${message}</span>`;
+  container.innerHTML = `<span>${word} nie je povolené</span>`;
   container.classList.add('show');
   setTimeout(() => {
     container.innerHTML = oldHTML;

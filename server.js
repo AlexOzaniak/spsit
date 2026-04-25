@@ -89,39 +89,12 @@ app.get('/api/ideas', async (req, res) => {
 app.post('/api/ideas', async (req, res) => {
   const { nick, grade, category, mood, text } = req.body;
   
-  // Get client IP for rate limiting
-  const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || 
-             req.connection.remoteAddress || 
-             req.socket.remoteAddress;
-  
   try {
     const connection = await pool.getConnection();
     
-    // Check for duplicate text (case-insensitive) - last 24 hours
-    const [duplicates] = await connection.execute(
-      'SELECT id FROM spsit WHERE LOWER(text) = LOWER(?) AND created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)',
-      [text]
-    );
-    
-    if (duplicates.length > 0) {
-      connection.release();
-      return res.status(400).json({ error: 'Rovnaký návrh si už poslal. Skús niečo nové!' });
-    }
-    
-    // Rate limiting: Check if user posted in last 15 seconds
-    const [recentPosts] = await connection.execute(
-      'SELECT id FROM spsit WHERE ip_address_internal = ? AND created_at > DATE_SUB(NOW(), INTERVAL 15 SECOND)',
-      [ip]
-    );
-    
-    if (recentPosts.length > 0) {
-      connection.release();
-      return res.status(429).json({ error: 'Čakaj 15 sekúnd pred ďalším návrhom.' });
-    }
-    
     const [result] = await connection.execute(
-      'INSERT INTO spsit (nick, grade, category, mood, text, ip_address_internal) VALUES (?, ?, ?, ?, ?, ?)',
-      [nick || null, grade, category, mood, text, ip]
+      'INSERT INTO spsit (nick, grade, category, mood, text) VALUES (?, ?, ?, ?, ?)',
+      [nick || null, grade, category, mood, text]
     );
     connection.release();
     res.json({ id: result.insertId, ...req.body });
@@ -143,11 +116,17 @@ app.put('/api/ideas/:id/like', async (req, res) => {
 
 app.post('/api/ideas/:id/vote', async (req, res) => {
   const { vote } = req.body;
+  
   try {
     const connection = await pool.getConnection();
+    // Store only vote status, without IP
+    // If vote = true, store "BUDE HLASOVAT" or just true
+    // If vote = false or null, store null
+    const voteValue = vote ? true : null;
+    
     await connection.execute(
       'UPDATE spsit SET voted_for_creators = ? WHERE id = ?',
-      [vote || null, req.params.id]
+      [voteValue, req.params.id]
     );
     connection.release();
     res.json({ success: true });
