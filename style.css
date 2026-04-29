@@ -178,6 +178,9 @@ nav {
 .icard-text {
   font-size: .96rem; line-height: 1.75;
   color: #e7ece5; margin-bottom: 1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 .icard-foot {
   display: flex; align-items: center; justify-content: space-between;
