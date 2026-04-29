@@ -216,7 +216,7 @@ function render() {
         <span class="icard-cat">${esc(CATS[idea.category] || 'Iné')}</span>
         <span class="icard-mood">${MOODS[idea.mood] || ''}</span>
       </div>
-      <p class="icard-text">${esc(idea.text)}</p>
+      <p class="icard-text" style="white-space:pre-wrap;overflow:visible;text-overflow:clip;">${esc(idea.text)}</p>
       <div class="icard-foot">
         <span class="icard-who">🎓 ${idea.nick ? esc(idea.nick) : 'Anonymný'}${idea.grade ? ` · ${idea.grade}. roč.` : ''} · ${ago(idea.created_at)}</span>
         <button class="icard-like" data-id="${idea.id}" onclick="handleLike(${idea.id})">

@@ -180,7 +180,10 @@ nav {
   color: #e7ece5; margin-bottom: 1rem;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  white-space: normal;
+  white-space: pre-wrap;
+  overflow: visible;
+  text-overflow: clip;
+  max-height: none;
 }
 .icard-foot {
   display: flex; align-items: center; justify-content: space-between;
